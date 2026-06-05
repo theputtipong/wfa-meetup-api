@@ -1,0 +1,48 @@
+# Docker Compose Override for Local M1 Mac Development
+# This file is automatically used by docker-compose when present
+# Place any local M1-specific configurations here
+
+version: '3.8'
+
+services:
+  postgres:
+    # Add shared memory for M1 optimizations
+    shm_size: 256MB
+    # Connection pooling for better performance
+    environment:
+      - POSTGRES_INITDB_ARGS=-c shared_buffers=256MB -c max_connections=200
+
+  redis:
+    # Optimize for M1 with persistence
+    command: redis-server --appendonly yes --appendfsync everysec
+    volumes:
+      - redis_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TARGETOS=darwin
+        - TARGETARCH=arm64
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=wfa_meetup
+      - REDIS_URL=redis:6379
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY:-MOCK_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: ./api
+
+volumes:
+  redis_data:
