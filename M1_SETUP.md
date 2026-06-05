@@ -16,32 +16,46 @@ This project is now fully optimized for **Mac M1/M2/M3** (Apple Silicon) develop
 ### Prerequisites
 
 1. **Install Homebrew** (if not already installed):
+
    ```bash
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
 
 2. **Install Go 1.24+**:
+
    ```bash
    brew install go
    ```
+
    Verify: `go version`
 
-3. **Install Docker Desktop for Mac**:
-   - Download from [Docker's official website](https://www.docker.com/products/docker-desktop)
-   - Ensure Docker Desktop is running before starting the API
+3. **Install Docker Desktop for Mac or Colima**:
+   - **Docker Desktop**: Download from Docker's official website
+   - **Colima (Alternative)**:
+     ```bash
+     brew install colima docker docker-compose docker-buildx
+     mkdir -p ~/.docker/cli-plugins
+     ln -sfn $(which docker-buildx) ~/.docker/cli-plugins/docker-buildx
+     colima start
+     ```
+   - Ensure your Docker daemon is running before starting the API
 
 ### Setup & Run
 
 1. **M1-specific setup** (one-time):
+
    ```bash
    make m1-setup
    ```
 
 2. **Start all services**:
+
    ```bash
    make docker-up
    ```
+
    Wait for the health checks to pass:
+
    ```bash
    docker-compose ps
    ```
@@ -56,6 +70,7 @@ The API will start on `http://localhost:3000`
 ## 📚 Available Commands
 
 ### Development
+
 ```bash
 make dev                # Run with hot reload (requires air)
 make run                # Build and run
@@ -67,6 +82,7 @@ make fmt                # Format code
 ```
 
 ### Docker Management
+
 ```bash
 make docker-build       # Build Docker image for M1
 make docker-up          # Start services
@@ -75,6 +91,7 @@ make docker-logs        # View logs
 ```
 
 ### Maintenance
+
 ```bash
 make install-deps       # Install Go dependencies
 make clean              # Clean build artifacts
@@ -104,49 +121,58 @@ GOOGLE_MAPS_API_KEY=your_api_key_here
 
 ### Service Ports
 
-| Service | Port | URL |
-|---------|------|-----|
-| API | 3000 | http://localhost:3000 |
-| PostgreSQL | 5432 | localhost:5432 |
-| MongoDB | 27017 | localhost:27017 |
-| Redis | 6379 | localhost:6379 |
-| RabbitMQ AMQP | 5672 | localhost:5672 |
-| RabbitMQ UI | 15672 | http://localhost:15672 |
+| Service       | Port  | URL                    |
+| ------------- | ----- | ---------------------- |
+| API           | 3000  | http://localhost:3000  |
+| PostgreSQL    | 5432  | localhost:5432         |
+| MongoDB       | 27017 | localhost:27017        |
+| Redis         | 6379  | localhost:6379         |
+| RabbitMQ AMQP | 5672  | localhost:5672         |
+| RabbitMQ UI   | 15672 | http://localhost:15672 |
 
 ## 🏗️ Architecture
 
 ### Multi-stage Docker Build
+
 The Dockerfile uses multi-stage builds optimized for M1:
+
 - **Builder stage**: Compiles Go binary for ARM64
 - **Final stage**: Minimal Alpine Linux image for runtime
 
 This results in:
+
 - ✓ Fast builds on M1 (native compilation)
 - ✓ Small image size
 - ✓ No CGO dependencies needed
 
 ### Platform Specifications
+
 All Docker services explicitly specify `platform: linux/arm64` in docker-compose.yml to ensure native M1 performance.
 
 ## 🧪 Testing on M1
 
 Run comprehensive tests:
+
 ```bash
 make test               # Unit tests with race detection
 make test-coverage      # Generate HTML coverage report
 ```
 
 The GitHub Actions workflow automatically tests:
+
 - macOS latest (M1 native)
 - Ubuntu latest (x64 for compatibility)
 
 ## 📊 Development Workflow
 
 ### Hot Reload Development
+
 ```bash
 make dev
 ```
+
 This will:
+
 1. Start all Docker services
 2. Install `air` for hot reload (if not present)
 3. Watch for file changes and automatically rebuild
@@ -154,16 +180,19 @@ This will:
 ### Building for Different Architectures
 
 **Build for M1/ARM64** (default on M1 Mac):
+
 ```bash
 make build
 ```
 
 **Build for Intel/AMD64** (cross-compile):
+
 ```bash
 GOOS=darwin GOARCH=amd64 make build
 ```
 
 **Build for Linux/ARM64** (Docker):
+
 ```bash
 make docker-build
 ```
@@ -171,6 +200,7 @@ make docker-build
 ## 🐛 Troubleshooting
 
 ### Docker Services Won't Start
+
 ```bash
 # Check Docker Desktop is running
 docker ps
@@ -184,6 +214,7 @@ make docker-up
 ```
 
 ### Build Issues
+
 ```bash
 # Clean and rebuild
 make clean
@@ -194,7 +225,9 @@ go version
 ```
 
 ### Port Already in Use
+
 If a port is already in use:
+
 ```bash
 # Find process using port (example: port 5432)
 lsof -i :5432
@@ -206,6 +239,7 @@ kill -9 <PID>
 ```
 
 ### Redis/Database Connection Issues
+
 ```bash
 # Wait for health checks to pass
 docker-compose ps
@@ -235,6 +269,7 @@ docker-compose logs redis
 ## 🤝 Contributing
 
 When contributing, please ensure:
+
 1. Code works on both x64 and ARM64
 2. Docker images build for both architectures
 3. Tests pass: `make test`

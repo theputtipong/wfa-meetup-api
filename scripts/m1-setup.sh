@@ -46,9 +46,9 @@ fi
 
 # Check for Docker
 if ! command -v docker &> /dev/null; then
-    echo "⚠️  Docker Desktop for Mac not found"
-    echo "Please install from: https://www.docker.com/products/docker-desktop"
-    echo "After installation, ensure Docker Desktop is running"
+    echo "⚠️  Docker CLI not found"
+    echo "Please install Docker Desktop (https://www.docker.com/products/docker-desktop)"
+    echo "Or use Colima: brew install colima docker docker-compose docker-buildx && colima start"
 else
     echo "✓ Docker found"
 fi
@@ -97,7 +97,7 @@ echo ""
 echo "✅ Setup complete!"
 echo ""
 echo "Next steps:"
-echo "1. Start Docker Desktop for Mac"
+echo "1. Start Docker (Docker Desktop or 'colima start')"
 echo "2. Run: make docker-up"
 echo "3. Run: make run"
 echo ""

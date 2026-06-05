@@ -54,8 +54,10 @@ test-coverage: install-deps
 # Install dependencies
 install-deps:
 	@echo "Installing dependencies..."
+	@echo "📥 Installing Go dependencies..."
 	go mod download
 	go mod tidy
+	@echo "✓ Dependencies installed"
 
 # Clean build artifacts
 clean:
@@ -118,6 +120,7 @@ m1-setup:
 	@echo ""
 	@echo "✓ M1 Mac setup complete!"
 	@echo "Next steps:"
+	@echo "1. Start Docker (Docker Desktop or 'colima start')"
 	@echo "1. Start Docker Desktop for Mac"
 	@echo "2. Run: make docker-up   (to start services)"
 	@echo "3. Run: make run         (to start the API)"

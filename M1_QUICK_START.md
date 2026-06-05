@@ -19,21 +19,23 @@ API runs at: http://localhost:3000
 
 ## 📝 Common Commands
 
-| Command | Purpose |
-|---------|---------|
-| `make dev` | Development with hot reload |
-| `make test` | Run all tests |
-| `make lint` | Check code quality |
-| `make docker-logs` | View service logs |
-| `make clean` | Clean build artifacts |
+| Command            | Purpose                     |
+| ------------------ | --------------------------- |
+| `make dev`         | Development with hot reload |
+| `make test`        | Run all tests               |
+| `make lint`        | Check code quality          |
+| `make docker-logs` | View service logs           |
+| `make clean`       | Clean build artifacts       |
 
 ## 🐛 Troubleshooting
 
 **Docker won't start:**
-- Ensure Docker Desktop for Mac is running
+
+- Ensure Docker Desktop for Mac is running, or run `colima start`
 - Check: `docker ps`
 
 **Port already in use:**
+
 ```bash
 lsof -i :5432  # Check port 5432
 kill -9 <PID>  # Kill the process

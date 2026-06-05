@@ -1,4 +1,8 @@
 # Multi-stage build for M1 and other architectures
+
+ARG BUILDPLATFORM=linux/arm64
+ARG TARGETPLATFORM=linux/arm64
+
 # Build stage
 FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS builder
 

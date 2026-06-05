@@ -2,15 +2,12 @@
 # This file is automatically used by docker-compose when present
 # Place any local M1-specific configurations here
 
-version: '3.8'
-
 services:
   postgres:
     # Add shared memory for M1 optimizations
     shm_size: 256MB
-    # Connection pooling for better performance
-    environment:
-      - POSTGRES_INITDB_ARGS=-c shared_buffers=256MB -c max_connections=200
+    # Performance optimizations for M1
+    command: postgres -c shared_buffers=256MB -c max_connections=200
 
   redis:
     # Optimize for M1 with persistence
@@ -19,11 +16,12 @@ services:
       - redis_data:/data
 
   api:
+    platform: linux/arm64
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        - TARGETOS=darwin
+        - TARGETOS=linux
         - TARGETARCH=arm64
     ports:
       - "3000:3000"
@@ -40,9 +38,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes:
-      - .:/app
-    command: ./api
 
 volumes:
   redis_data:
