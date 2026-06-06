@@ -18,6 +18,7 @@ import (
     gorm_postgres "gorm.io/driver/postgres"
 	http_delivery "wfa-meetup-api/internal/delivery/http"
 	redis_repo "wfa-meetup-api/internal/repository/redis"
+    ws_delivery "wfa-meetup-api/internal/delivery/ws"
 )
 
 func main() {
@@ -60,6 +61,9 @@ func main() {
 	// 3. ผูกเข้ากับ Fiber App (Handler)
     http.NewUserHandler(app, userUsecase)
 	http_delivery.NewCafeHandler(app, cafeUsecase)
+    // --- Phase 3: Setup WebSockets ---
+	chatHub := ws_delivery.NewChatHub()
+	ws_delivery.NewChatHandler(app, chatHub)
 
     
     // 5. สั่งให้ Server เริ่มทำงานที่ Port 3000
