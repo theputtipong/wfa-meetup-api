@@ -35,6 +35,16 @@ services:
   redis:
     image: redis:7-alpine
     platform: linux/arm64
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--appendfsync",
+        "everysec",
+        "--ignore-warnings",
+        "ARM64-COW-BUG",
+      ]
     ports:
       - "6379:6379"
     healthcheck:

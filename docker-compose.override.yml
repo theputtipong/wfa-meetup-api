@@ -11,7 +11,16 @@ services:
 
   redis:
     # Optimize for M1 with persistence
-    command: redis-server --appendonly yes --appendfsync everysec
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--appendfsync",
+        "everysec",
+        "--ignore-warnings",
+        "ARM64-COW-BUG",
+      ]
     volumes:
       - redis_data:/data
 

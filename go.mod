@@ -3,6 +3,7 @@ module wfa-meetup-api
 go 1.24.1
 
 require (
+	github.com/gofiber/contrib/websocket v1.3.4
 	github.com/gofiber/fiber/v2 v2.52.13
 	github.com/redis/go-redis/v9 v9.20.0
 	gorm.io/driver/postgres v1.6.0
@@ -13,7 +14,6 @@ require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/fasthttp/websocket v1.5.8 // indirect
-	github.com/gofiber/contrib/websocket v1.3.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
